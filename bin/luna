@@ -426,9 +426,11 @@ def osimage_clone(**args):
     newosimage = luna.OsImage(name = args['to'],
         create = True,
         path = targetpath,
-        kernver = osimage.get('kernver'))
+    )
     # copy params
-    for param in ['dracutmodules', 'kernmodules', 'kernopts', 'grab_filesystems', 'grab_exclude_list']:
+    params = ['dracutmodules', 'kernmodules', 'kernopts', 'kernver',
+              'grab_filesystems', 'grab_exclude_list']
+    for param in params:
         newosimage.set(param, osimage.get(param))
     return True
 
