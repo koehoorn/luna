@@ -99,7 +99,12 @@ class OsImage(Base):
         self._logger = logging.getLogger(__name__ + '.' + self._name)
 
     def list_kernels(self):
-        return self.get_package_ver(self.get('path'), 'kernel')
+        std_kerns = self.get_package_ver(self.get('path'), 'kernel')
+        ml_kerns = self.get_package_ver(self.get('path'), 'kernel-ml')
+        lt_kerns = self.get_package_ver(self.get('path'), 'kernel-lt')
+        versions = set(std_kerns + ml_kerns + lt_kerns)
+        versions.add(self.json['kernver'])
+        return versions
 
     def get_package_ver(self, path, package):
         rpm.addMacro("_dbpath", path + '/var/lib/rpm')
@@ -112,15 +117,17 @@ class OsImage(Base):
         return package_vers
 
     def _check_kernel(self, path, kernver):
-        os_image_kernvers = None
+        os_image_kernvers = []
         if not os.path.isdir(path):
             self._logger.error("{} is not valid dir".format(path))
             return None
         try:
-            os_image_kernvers = self.get_package_ver(path,'kernel')
-            #req_kernver = os_image_kernvers.index(kernver)
+            std_kerns = self.get_package_ver(path, 'kernel')
+            ml_kerns = self.get_package_ver(path, 'kernel-ml')
+            lt_kerns = self.get_package_ver(path, 'kernel-lt')
+            versions = set(std_kerns + ml_kerns + lt_kerns)
+            os_image_kernvers = list(versions)
         except:
-            #req_kernver = None
             if os_image_kernvers == []:
                 self._logger.error("No kernel package installed in {}".format(path))
                 return None
