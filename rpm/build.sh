@@ -16,8 +16,8 @@ then
   VERSION=9999
   BUILD=$(git log --pretty=format:'' | wc -l)
 else
-  VERSION=$(git describe --tag  | sed -r 's/^v([\.0-9]*)-(.*)$/\1/')
-  BUILD=$(git describe --tag  | sed -r 's/^v([\.0-9]*)-(.*)$/\2/' | tr - .)
+  VERSION=$(git describe --tag  | sed -r 's/^v([\.0-9]*)$/\1/')
+  BUILD=$(git rev-list ${VERSION}.. --count)
 fi
 
 mkdir -p ${SCRIPTDIR}/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
