@@ -120,7 +120,7 @@ chmod 600 /opt/luna/os/compute/root/.ssh/authorized_keys
 ### Configure a new luna cluster
 
 ```
-echo "generate a luna database password password"
+echo "generate a luna database password"
 openssl rand -base64 6
 mongo localhost:27017/luna
 > db.createUser( { user: "luna", pwd: "ZdD5bpLG", roles: [ { role: "dbOwner", db: "luna" } ] } )
