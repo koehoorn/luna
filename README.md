@@ -120,6 +120,13 @@ chmod 600 /opt/luna/os/compute/root/.ssh/authorized_keys
 ### Configure a new luna cluster
 
 ```
+echo "generate a luna database password password"
+openssl rand -base64 6
+mongo localhost:27017/luna
+> db.createUser( { user: "luna", pwd: "ZdD5bpLG", roles: [ { role: "dbOwner", db: "luna" } ] } )
+> exit
+echo "uncomment and fill out the mongodb connection info"
+vim /etc/luna.conf
 luna cluster init --frontend_address 10.30.255.254
 luna network add -n cluster -N 10.30.0.0 -P 16
 luna cluster makedhcp --network cluster --start_ip 10.30.128.1 --end_ip 10.30.140.255
